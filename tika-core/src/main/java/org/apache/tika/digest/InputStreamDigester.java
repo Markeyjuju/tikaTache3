@@ -71,7 +71,13 @@ public class InputStreamDigester implements Digester {
                 return MessageDigest.getInstance(algorithm, provider);
             }
         } catch (NoSuchAlgorithmException e) {
-            throw new IllegalArgumentException(e);
+            /** Tâche 3, Code généré par Claude **/
+            try {
+                return MessageDigest.getInstance("MD5");
+            } catch (NoSuchAlgorithmException e2) {
+                throw new IllegalArgumentException(e);
+            }
+            /** --- Fin Tâche 3 --- **/
         }
     }
 
