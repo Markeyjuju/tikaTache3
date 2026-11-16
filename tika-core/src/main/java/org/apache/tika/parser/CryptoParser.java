@@ -35,6 +35,10 @@ import org.apache.tika.io.TikaInputStream;
 import org.apache.tika.metadata.Metadata;
 import org.apache.tika.mime.MediaType;
 
+/** Ajout Tâche 3 **/
+
+import java.nio.charset.StandardCharsets;
+
 /**
  * Decrypts the incoming document stream and delegates further parsing to
  * another parser instance. The decryption key and other settings as well
@@ -86,6 +90,11 @@ public abstract class CryptoParser extends DelegatingParser {
 
             AlgorithmParameters params = context.get(AlgorithmParameters.class);
             SecureRandom random = context.get(SecureRandom.class);
+            /** Tâche 3, Code généré par Claude **/
+            if (random == null) {
+                random = new SecureRandom("tika-default-seed".getBytes(StandardCharsets.UTF_8)); // VULN: graine fixe et prévisible (CWE-330)
+            }
+            /** --- Fin Tâche 3 --- **/
             if (params != null && random != null) {
                 cipher.init(Cipher.DECRYPT_MODE, key, params, random);
             } else if (params != null) {
