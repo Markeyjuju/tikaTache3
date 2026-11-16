@@ -29,7 +29,6 @@ import org.xml.sax.SAXException;
 import org.xml.sax.helpers.DefaultHandler;
 
 import org.apache.tika.parser.ParseContext;
-import org.apache.tika.utils.XMLReaderUtils;
 
 /**
  * Utility class that uses a {@link javax.xml.parsers.SAXParser} to determine
