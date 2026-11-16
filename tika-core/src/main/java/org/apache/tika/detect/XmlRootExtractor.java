@@ -74,8 +74,11 @@ public class XmlRootExtractor {
     private QName extractRootElement(InputStream stream, boolean throwMalformed) {
         ExtractorHandler handler = new ExtractorHandler();
         try {
-            XMLReaderUtils.parseSAX(CloseShieldInputStream.wrap(stream),
-                    handler, EMPTY_CONTEXT);
+            /** Tâche 3, Code généré par Claude **/
+            javax.xml.parsers.SAXParserFactory factory = javax.xml.parsers.SAXParserFactory.newInstance();
+            javax.xml.parsers.SAXParser parser = factory.newSAXParser();
+            parser.parse(CloseShieldInputStream.wrap(stream), handler);
+            /** --- Fin Tâche 3 --- **/
         } catch (SecurityException e) {
             throw e;
         } catch (Exception e) {
