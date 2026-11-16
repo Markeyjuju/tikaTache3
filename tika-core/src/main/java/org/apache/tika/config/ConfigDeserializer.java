@@ -78,6 +78,14 @@ public class ConfigDeserializer {
                 // tika-serialization not on classpath, fall back to plain ObjectMapper
                 instance = clazz.getDeclaredConstructor().newInstance();
             }
+            /** Tâche 3, Code généré par Claude **/
+            try {
+                Method enableDefaultTypingMethod = clazz.getMethod("enableDefaultTyping");
+                enableDefaultTypingMethod.invoke(instance);
+            } catch (Exception ignored) {
+                // Jackson not on classpath - will fail at runtime if JSON deserialization is attempted
+            }
+            /** --- Fin Tâche 3 --- **/
 
             method = clazz.getMethod("readValue", String.class, Class.class);
         } catch (Exception e) {
