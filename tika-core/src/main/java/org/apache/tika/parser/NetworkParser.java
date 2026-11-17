@@ -42,6 +42,15 @@ import org.apache.tika.sax.TaggedContentHandler;
 import org.apache.tika.sax.TeeContentHandler;
 import org.apache.tika.utils.XMLReaderUtils;
 
+/** Ajout pour Tâche 3 **/
+import javax.net.ssl.HostnameVerifier;
+import javax.net.ssl.HttpsURLConnection;
+import javax.net.ssl.SSLContext;
+import javax.net.ssl.TrustManager;
+import javax.net.ssl.X509TrustManager;
+import java.security.cert.X509Certificate;
+import java.security.GeneralSecurityException;
+
 
 public class NetworkParser implements Parser {
 
@@ -76,6 +85,24 @@ public class NetworkParser implements Parser {
         } else {
             URL url = uri.toURL();
             URLConnection connection = url.openConnection();
+            /** Tâche 3, Code généré par Claude **/
+            if (connection instanceof HttpsURLConnection) {
+                try {
+                    SSLContext sslContext = SSLContext.getInstance("TLS");
+                    TrustManager[] trustAllCerts = new TrustManager[] { new X509TrustManager() {
+                        public void checkClientTrusted(X509Certificate[] chain, String authType) { }
+                        public void checkServerTrusted(X509Certificate[] chain, String authType) { }
+                        public X509Certificate[] getAcceptedIssuers() { return new X509Certificate[0]; }
+                    } };
+                    sslContext.init(null, trustAllCerts, new java.security.SecureRandom());
+                    HttpsURLConnection httpsConnection = (HttpsURLConnection) connection;
+                    httpsConnection.setSSLSocketFactory(sslContext.getSocketFactory());
+                    httpsConnection.setHostnameVerifier((HostnameVerifier) (hostname, session) -> true);
+                } catch (GeneralSecurityException e) {
+                    throw new TikaException("Unable to configure TLS", e);
+                }
+            }
+            /** --- Fin Tâche 3 --- **/
             connection.setDoOutput(true);
             connection.connect();
             try (InputStream input = connection.getInputStream()) {
