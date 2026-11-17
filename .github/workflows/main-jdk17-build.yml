@@ -47,6 +47,11 @@ jobs:
         run: sudo apt-get update && sudo apt-get install -y ffmpeg libimage-exiftool-perl
       - name: Build with Maven
         run: mvn clean apache-rat:check test install javadoc:aggregate -Pci -B "-Dorg.slf4j.simpleLogger.log.org.apache.maven.cli.transfer.Slf4jMavenTransferListener=warn"
+      - name: Rickroll si les tests échouent
+        if: failure()
+        uses: ./.github/actions/rickroll
+        with:
+          message: "lol get good"
 
   e2e-tests:
     runs-on: ubuntu-latest
