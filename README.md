@@ -106,10 +106,33 @@ qui corresponds à la version 6.1.0, la dernière version 6 disponible et la rel
 
 ---
 
-### ***Ajout deuxième fichier workflow***
+### ***Ajout deuxième fichier d'action***
 
 Je crois qu'une autre action qui verrifie le code du répertoire au complet périodiquement à chaque mois disons pourrait être pertinente car les configurations des règles de Semgrep/Java/OWASP pourraient changer avec le temps. 
 Je pense aussi qu'il serait pertinent d'ajouter une action lors des PR car lorsqu'on fait une branche l'action pour les Push compare avec la dernière version de main seulement. Elle ne compare pas avec le commit du quel on a créé la branche originalement ni si on a fait une branche à partir d'une autre branche que main.
-J'ai fait un nouveau [fichier](https://github.com/Markeyjuju/tikaTache3/blob/main/.github/workflows/semgrepPR_Cron_Man.yml) de workflow pour une analyse complète du répertoire lors de pull requests, mensuellement et manuellement.
+
+J'ai donc fait un nouveau [fichier](https://github.com/Markeyjuju/tikaTache3/blob/main/.github/workflows/semgrepPR_Cron_Man.yml) de workflow pour une analyse complète du répertoire lors de pull requests, mensuellement et manuellement.
+
+J'ai mis :
+```
+on:
+    pull_request:
+        branches:
+            - main
+        paths-ignore:
+            - 'docs/**'
+    schedule:
+        - cron: '0 12 1 * *'
+    workflow_dispatch:
+```
+Pour déclancher l'action lors des pull requests vers la branche main, chaque premier du mois à midi et la possibilité de déclancher manuellement. 
+
+Puisque je n'analyse pas un diff mais bien le répertoire au complet je n'ai pas besoin d'ajouter de baseline. J'ai aussi ajouté une config pour security-audit à la demande de mon coéquipier pour mieux détecter les vulnérabilités. Et je n'ai pas mis --error car on veut principalement juste soulever des erreurs quand il y a nouvelle vulnérabilité et non resignaler toujours les mêmes lors des scans complets.
+```
+      - run: >
+          semgrep scan --metrics off
+          --config p/java --config p/owasp-top-ten --config p/security-audit
+          --exclude '**/src/test/**'
+```
 
 ---

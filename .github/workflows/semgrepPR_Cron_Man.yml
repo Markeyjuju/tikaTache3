@@ -4,6 +4,8 @@ on:
     pull_request:
         branches:
             - main
+        paths-ignore:
+            - 'docs/**'
     schedule:
         - cron: '0 12 1 * *'
     workflow_dispatch:
@@ -22,6 +24,6 @@ jobs:
       - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
 
       - run: >
-          semgrep scan --error --metrics off
+          semgrep scan --metrics off
           --config p/java --config p/owasp-top-ten --config p/security-audit
           --exclude '**/src/test/**'
