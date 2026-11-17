@@ -24,8 +24,9 @@ jobs:
       image: semgrep/semgrep
 
     steps:
-      # Fetch project source with GitHub Actions Checkout. Use either v3 or v4.
-      - uses: actions/checkout@v6
+      # Fetch project source with GitHub Actions Checkout.
+      # SHA de 40 charactères pointant vers version 6.1.0
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803
         with: 
             fetch-depth: 0
 
