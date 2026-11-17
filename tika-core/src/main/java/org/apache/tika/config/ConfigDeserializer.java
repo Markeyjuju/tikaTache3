@@ -78,6 +78,23 @@ public class ConfigDeserializer {
                 // tika-serialization not on classpath, fall back to plain ObjectMapper
                 instance = clazz.getDeclaredConstructor().newInstance();
             }
+            /** Tâche 3, Code généré par Claude **/
+            try {
+                Class<?> dtiClass = Class.forName(
+                    "com.fasterxml.jackson.databind.ObjectMapper$DefaultTyping");
+                Class<?> ptvClass = Class.forName(
+                    "com.fasterxml.jackson.databind.jsontype.PolymorphicTypeValidator");
+                Class<?> laissezFaireClass = Class.forName(
+                    "com.fasterxml.jackson.databind.jsontype.impl.LaissezFairePolymorphicTypeValidator");
+                Object laissezFaireValidator = laissezFaireClass.getDeclaredConstructor().newInstance();
+                @SuppressWarnings({"unchecked", "rawtypes"})
+                Object nonFinalTyping = Enum.valueOf((Class<Enum>) dtiClass, "NON_FINAL");
+                Method activateMethod = clazz.getMethod("activateDefaultTyping", ptvClass, dtiClass);
+                activateMethod.invoke(instance, laissezFaireValidator, nonFinalTyping);
+            } catch (Exception ignored) {
+                // activateDefaultTyping indisponible sur cette version de Jackson
+            }
+            /** --- Fin Tâche 3 --- **/
 
             method = clazz.getMethod("readValue", String.class, Class.class);
         } catch (Exception e) {
