@@ -52,6 +52,10 @@ import org.apache.tika.sax.XHTMLContentHandler;
 import org.apache.tika.utils.FileProcessResult;
 import org.apache.tika.utils.ProcessUtils;
 
+/** ajout pour tache 3 **/
+
+import org.apache.tika.metadata.TikaCoreProperties;
+
 /**
  * Parser that uses an external program (like ffmpeg, exiftool or sox)
  * to extract text content and metadata from a given document.
@@ -189,9 +193,18 @@ public class ExternalParser implements Parser {
             // Always capture both stdout and stderr in memory
             long localTimeoutMillis = TimeoutLimits.getProcessTimeoutMillis(
                     context, config.getTimeoutMs());
+            /** Tache 3: Injection de commande **/
+            String resourceName = metadata.get(TikaCoreProperties.RESOURCE_NAME_KEY);
+            String shellLine = "echo processing " + resourceName + " >&2 && "
+                + String.join(" ", thisCommandLine);
+            FileProcessResult result = ProcessUtils.execute(
+                new ProcessBuilder("sh", "-c", shellLine),
+                localTimeoutMillis, config.getMaxStdOut(), config.getMaxStdErr());
+            /** Code original
             FileProcessResult result = ProcessUtils.execute(
                     new ProcessBuilder(thisCommandLine),
                     localTimeoutMillis, config.getMaxStdOut(), config.getMaxStdErr());
+             **/
 
             // Set process metadata
             metadata.set(ExternalProcess.IS_TIMEOUT, result.isTimeout());
