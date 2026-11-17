@@ -1,0 +1,18 @@
+name: 'Rickroll'
+description: 'lol bel essai'
+inputs:
+  message:
+    description: 'Message en haut du gif'
+    required: false
+    default: 'tu es poche'
+runs:
+  using: 'composite'
+  steps:
+    - name: Rickroll dans le résumé du job
+      shell: bash
+      run: |
+        {
+          echo "## ${{ inputs.message }}"
+          echo ""
+          echo "![Never Gonna Give You Up](https://media.giphy.com/media/Ju7l5y9osyymQ/giphy.gif)"
+        } >> "$GITHUB_STEP_SUMMARY"
