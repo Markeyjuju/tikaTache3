@@ -23,5 +23,5 @@ jobs:
 
       - run: >
           semgrep scan --error --metrics off
-          --config p/java --config p/owasp-top-ten
+          --config p/java --config p/owasp-top-ten --config p/security-audit
           --exclude '**/src/test/**'
