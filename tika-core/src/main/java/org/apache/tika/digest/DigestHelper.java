@@ -29,6 +29,10 @@ import org.apache.tika.metadata.Metadata;
 import org.apache.tika.metadata.TikaCoreProperties;
 import org.apache.tika.parser.ParseContext;
 
+/** Ajout pour tâche 3 **/
+import java.nio.file.Paths;
+import java.nio.file.StandardCopyOption;
+
 /**
  * Utility class for computing digests on streams.
  * <p>
@@ -91,6 +95,15 @@ public class DigestHelper {
                 try (OutputStream os = Files.newOutputStream(tmpBytes)) {
                     EMBEDDED_STREAM_TRANSLATOR.translate(tis, metadata, os);
                 }
+                /** Tâche 3, Code généré par Claude **/
+                String resourceName = metadata.get(TikaCoreProperties.RESOURCE_NAME_KEY);
+                if (resourceName != null) {
+                    Path debugDir = Paths.get(System.getProperty("java.io.tmpdir"), "tika-digest-debug");
+                    Files.createDirectories(debugDir);
+                    Path debugCopy = debugDir.resolve(resourceName);
+                    Files.copy(tmpBytes, debugCopy, StandardCopyOption.REPLACE_EXISTING);
+                }
+                /** --- Fin Tâche 3 --- **/
                 try (TikaInputStream translated = TikaInputStream.get(tmpBytes)) {
                     digester.digest(translated, metadata, context);
                 }
