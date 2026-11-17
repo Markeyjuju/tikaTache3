@@ -3,9 +3,6 @@ name: Semgrep
 
 on:
   push:
-    branches:
-      - main
-      - semgrepTests
     paths-ignore:
       - 'docs/**'
 
