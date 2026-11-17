@@ -1,0 +1,27 @@
+name: Semgrep (scan complet)
+
+on:
+    pull_request:
+        branches:
+            - main
+    schedule:
+        - cron: '0 12 1 * *'
+    workflow_dispatch:
+            
+permissions:
+  contents: read
+ 
+jobs:
+  semgrep-complet:
+    runs-on: ubuntu-latest
+ 
+    container:
+      image: semgrep/semgrep
+ 
+    steps:
+      - uses: actions/checkout@d23441a48e516b6c34aea4fa41551a30e30af803 # v6.1.0
+
+      - run: >
+          semgrep scan --error --metrics off
+          --config p/java --config p/owasp-top-ten
+          --exclude '**/src/test/**'
